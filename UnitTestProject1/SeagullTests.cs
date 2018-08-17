@@ -27,6 +27,36 @@ namespace UnitTestProject1
 
         readonly string filepath = "";
 
+        [DataTestMethod]
+        [DataRow(4, "exterior")]
+        [DataRow(4, "interior")]
+        public void PhotosAreSorted(int initialPhotoCount, string category)
+        {
+            
+            string path = category == "exterior" ? ExteriorRepositoryPath : InteriorRepositoryPath;
+
+            InitializeFolder(4, path);
+            PhotoRepository repo = new PhotoRepository(path);
+            List<string> photos = repo.GetFiles().ToList();
+
+            string[] fileNames = GetFileNames(path);
+
+            bool isSorted = true;
+            for(int index = 0; index < fileNames.Length; index++)
+            {
+                
+                if(fileNames[index] == photos[index])
+                {
+                    continue;
+                }
+
+                isSorted = false;
+                break;
+            }
+
+            Assert.IsTrue(isSorted, "Files Are Not Sorted Properly");
+        }
+
 
         [DataTestMethod]
         [DataRow(1)]

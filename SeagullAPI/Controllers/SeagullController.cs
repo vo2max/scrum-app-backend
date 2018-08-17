@@ -7,6 +7,7 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Configuration;
+using System.Linq;
 
 namespace SeagullAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace SeagullAPI.Controllers
 
     }
 
-    
+
 
     public class PhotoRepository
     {
@@ -45,7 +46,7 @@ namespace SeagullAPI.Controllers
         }
         public List<PhotoModel> GetPhotos()
         {
-            String[] files = Directory.GetFiles(_path);
+            List<string> files = GetFiles().ToList();
             List<PhotoModel> models = new List<PhotoModel>();
 
             foreach (string photos in files)
@@ -58,6 +59,11 @@ namespace SeagullAPI.Controllers
             }
 
             return models;
+        }
+
+        public IOrderedEnumerable<string> GetFiles()
+        {
+            return Directory.GetFiles(_path).OrderBy(f=>f);
         }
     }
 }
